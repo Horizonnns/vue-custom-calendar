@@ -102,12 +102,21 @@ const nextMonth = computed(() => {
 	}
 });
 
+const isSelected = ref(null);
 const formattedDate = ref(null);
 
 // selected-day
 const selectedDay = (day) => {
-	const selectedDate = new Date(currYear.value, currMonthIndex.value, day + 1);
-	formattedDate.value = selectedDate.toISOString().split('T')[0];
+	if (day) {
+		isSelected.value = day;
+
+		const selectedDate = new Date(
+			currYear.value,
+			currMonthIndex.value,
+			day + 1
+		);
+		formattedDate.value = selectedDate.toISOString().split('T')[0];
+	} else console.log('empty');
 };
 </script>
 
@@ -165,7 +174,10 @@ const selectedDay = (day) => {
 				<div v-for="day in daysToShow" :key="day.number">
 					<button
 						@click="selectedDay(day.number)"
-						:class="day.empty ? 'bg-gray-200' : ''"
+						:class="[
+							day.empty ? 'bg-gray-200' : '',
+							isSelected === day.number ? 'border-blue-500' : '',
+						]"
 						class="border w-9 h-9"
 					>
 						{{ day.number }}
@@ -174,6 +186,7 @@ const selectedDay = (day) => {
 			</div>
 		</div>
 
+		<!-- selected-date -->
 		<div class="flex justify-center text-lg">
 			<div v-if="!formattedDate">
 				<span v-if="currLanguage === 'ru'">Дата не выбрано...</span>
