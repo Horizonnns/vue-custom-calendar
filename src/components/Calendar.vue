@@ -50,16 +50,39 @@ const currMonthAndYear = computed(() => {
 	} ${currYear.value}`;
 });
 
-console.log('currMonthAndYear', currMonthAndYear.value);
+// current-days-of-month-in-array
+const currDate = computed(() => {
+	let date = new Date(currYear.value, currMonthIndex.value + 1, 0);
+	return (date = Array.from({ length: date.getDate() }, (_, i) => i + 1));
+});
+
+// current-days-of-month
+const daysToShow = computed(() => {
+	const days = [];
+
+	currDate.value.forEach((day) => {
+		days.push({ number: day });
+	});
+
+	return days;
+});
 </script>
 
 <template>
-	<div class="bg-white w-96 p-3 rounded-md shadow-2xl">
+	<div class="bg-white w-96 p-3 rounded-md shadow-2xl space-y-2">
+		<!-- header -->
 		<div class="flex items-center justify-between">
 			<button @click="languageToggler" class="uppercase">
 				{{ currLanguage }}
 			</button>
 			<span>{{ currMonthAndYear }}</span>
+		</div>
+
+		<!-- calendar-body -->
+		<div class="grid grid-cols-7 gap-4">
+			<div v-for="day in daysToShow" :key="day.number">
+				<button class="border w-9 h-9">{{ day.number }}</button>
+			</div>
 		</div>
 	</div>
 </template>
