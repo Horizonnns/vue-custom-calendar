@@ -32,6 +32,10 @@ const MONTHSEN = [
 	'December',
 ];
 
+// days
+const DAYSRU = ['Пнд', 'Втр', 'Срд', 'Чтв', 'Птн', 'Сбт', 'Вск'];
+const DAYSEN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 const currLanguage = ref('ru'); // current-language
 const currYear = ref(new Date().getFullYear()); // current-year
 const currMonthIndex = ref(new Date().getMonth()); // current-month-index
@@ -75,10 +79,11 @@ const daysToShow = computed(() => {
 
 	return days;
 });
+
 </script>
 
 <template>
-	<div class="bg-white w-96 p-3 rounded-md shadow-2xl space-y-2">
+	<div class="bg-white w-96 p-3 rounded-md shadow-2xl space-y-4">
 		<!-- header -->
 		<div class="flex items-center justify-between">
 			<button @click="languageToggler" class="uppercase">
@@ -88,12 +93,35 @@ const daysToShow = computed(() => {
 		</div>
 
 		<!-- calendar-body -->
+
+		<div class="space-y-1">
+			<div
+				v-if="currLanguage === 'ru'"
+				class="flex items-center justify-between"
+			>
+				<div v-for="day in DAYSRU" :key="day">
+					<span>{{ day }}</span>
+				</div>
+			</div>
+
+			<div
+				v-if="currLanguage === 'en'"
+				class="flex items-center justify-between"
+			>
+				<div v-for="day in DAYSEN" :key="day">
+					<span>{{ day }}</span>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-7 gap-5">
+				<div v-for="day in daysToShow" :key="day.number">
 					<button
 						:class="day.empty ? 'bg-gray-200' : ''"
 						class="border w-9 h-9"
 					>
 						{{ day.number }}
 					</button>
+				</div>
 			</div>
 		</div>
 	</div>
