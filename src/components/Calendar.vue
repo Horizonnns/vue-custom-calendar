@@ -32,10 +32,16 @@ const MONTHSEN = [
 	'December',
 ];
 
-const currLanguage = ref('ru');
+const currLanguage = ref('ru'); // current-language
 const currYear = ref(new Date().getFullYear()); // current-year
 const currMonthIndex = ref(new Date().getMonth()); // current-month-index
 
+// language-toggler
+const languageToggler = () => {
+	return (currLanguage.value = currLanguage.value === 'ru' ? 'en' : 'ru');
+};
+
+// current-date-(month-&&-year)
 const currMonthAndYear = computed(() => {
 	return `${
 		currLanguage.value === 'ru'
@@ -48,5 +54,12 @@ console.log('currMonthAndYear', currMonthAndYear.value);
 </script>
 
 <template>
-	<span>{{ currMonthAndYear }}</span>
+	<div class="bg-white w-96 p-3 rounded-md shadow-2xl">
+		<div class="flex items-center justify-between">
+			<button @click="languageToggler" class="uppercase">
+				{{ currLanguage }}
+			</button>
+			<span>{{ currMonthAndYear }}</span>
+		</div>
+	</div>
 </template>
