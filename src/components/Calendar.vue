@@ -56,12 +56,21 @@ const currDate = computed(() => {
 	return (date = Array.from({ length: date.getDate() }, (_, i) => i + 1));
 });
 
+// first-day-index-of-current-month
+const firstDayIndex = computed(() => {
+	return new Date(currYear.value, currMonthIndex.value, 1).getDay() - 1;
+});
+
 // current-days-of-month
 const daysToShow = computed(() => {
 	const days = [];
 
+	for (let i = 0; i < firstDayIndex.value; i++) {
+		days.push({ index: i, empty: true });
+	}
+
 	currDate.value.forEach((day) => {
-		days.push({ number: day });
+		days.push({ number: day, empty: false });
 	});
 
 	return days;
@@ -79,9 +88,12 @@ const daysToShow = computed(() => {
 		</div>
 
 		<!-- calendar-body -->
-		<div class="grid grid-cols-7 gap-4">
-			<div v-for="day in daysToShow" :key="day.number">
-				<button class="border w-9 h-9">{{ day.number }}</button>
+					<button
+						:class="day.empty ? 'bg-gray-200' : ''"
+						class="border w-9 h-9"
+					>
+						{{ day.number }}
+					</button>
 			</div>
 		</div>
 	</div>
