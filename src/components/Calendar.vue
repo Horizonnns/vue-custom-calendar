@@ -101,13 +101,24 @@ const nextMonth = computed(() => {
 		currMonthIndex.value++;
 	}
 });
+
+const formattedDate = ref(null);
+
+// selected-day
+const selectedDay = (day) => {
+	const selectedDate = new Date(currYear.value, currMonthIndex.value, day + 1);
+	formattedDate.value = selectedDate.toISOString().split('T')[0];
+};
 </script>
 
 <template>
 	<div class="bg-white w-96 p-3 rounded-md shadow-2xl space-y-4">
 		<!-- header -->
-		<div class="flex items-center justify-between">
-			<button @click="languageToggler" class="uppercase">
+		<div class="flex items-center justify-between text-lg">
+			<button
+				@click="languageToggler"
+				class="hover:bg-gray-50 active:bg-gray-100 p-1.5 rounded-lg uppercase"
+			>
 				{{ currLanguage }}
 			</button>
 
@@ -130,6 +141,7 @@ const nextMonth = computed(() => {
 
 		<!-- calendar-body -->
 		<div class="space-y-1">
+			<!-- ru-language -->
 			<div
 				v-if="currLanguage === 'ru'"
 				class="flex items-center justify-between"
@@ -139,6 +151,7 @@ const nextMonth = computed(() => {
 				</div>
 			</div>
 
+			<!-- en-language -->
 			<div
 				v-if="currLanguage === 'en'"
 				class="flex items-center justify-between"
@@ -151,6 +164,7 @@ const nextMonth = computed(() => {
 			<div class="grid grid-cols-7 gap-5">
 				<div v-for="day in daysToShow" :key="day.number">
 					<button
+						@click="selectedDay(day.number)"
 						:class="day.empty ? 'bg-gray-200' : ''"
 						class="border w-9 h-9"
 					>
@@ -158,6 +172,15 @@ const nextMonth = computed(() => {
 					</button>
 				</div>
 			</div>
+		</div>
+
+		<div class="flex justify-center text-lg">
+			<div v-if="!formattedDate">
+				<span v-if="currLanguage === 'ru'">Дата не выбрано...</span>
+				<span v-if="currLanguage === 'en'">Date no selected...</span>
+			</div>
+
+			<span>{{ formattedDate }}</span>
 		</div>
 	</div>
 </template>
