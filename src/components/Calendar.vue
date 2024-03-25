@@ -1,5 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
+import IconArrowNext from '../icons/IconArrowNext.vue';
+import IconArrowPrev from '../icons/IconArrowPrev.vue';
 
 // monthes
 const MONTHSRU = [
@@ -80,6 +82,25 @@ const daysToShow = computed(() => {
 	return days;
 });
 
+// change-current-month-to-prev
+const prevMonth = computed(() => {
+	if (currMonthIndex.value === 0) {
+		currMonthIndex.value = 11;
+		currYear.value--;
+	} else {
+		currMonthIndex.value--;
+	}
+});
+
+// change-current-month-to-next
+const nextMonth = computed(() => {
+	if (currMonthIndex.value === 11) {
+		currMonthIndex.value = 0;
+		currYear.value++;
+	} else {
+		currMonthIndex.value++;
+	}
+});
 </script>
 
 <template>
@@ -89,11 +110,25 @@ const daysToShow = computed(() => {
 			<button @click="languageToggler" class="uppercase">
 				{{ currLanguage }}
 			</button>
-			<span>{{ currMonthAndYear }}</span>
+
+			<div class="flex items-center space-x-4">
+				<button
+					@click="prevMonth"
+					class="hover:bg-gray-50 active:bg-gray-100 p-1.5 rounded-lg"
+				>
+					<IconArrowPrev />
+				</button>
+				<span>{{ currMonthAndYear }}</span>
+				<button
+					@click="nextMonth"
+					class="hover:bg-gray-50 active:bg-gray-100 p-1.5 rounded-lg"
+				>
+					<IconArrowNext />
+				</button>
+			</div>
 		</div>
 
 		<!-- calendar-body -->
-
 		<div class="space-y-1">
 			<div
 				v-if="currLanguage === 'ru'"
