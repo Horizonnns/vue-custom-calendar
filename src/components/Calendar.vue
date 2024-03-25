@@ -1,4 +1,6 @@
 <script setup>
+import { computed, ref } from 'vue';
+
 // monthes
 const MONTHSRU = [
 	'Январь',
@@ -30,8 +32,21 @@ const MONTHSEN = [
 	'December',
 ];
 
+const currLanguage = ref('ru');
+const currYear = ref(new Date().getFullYear()); // current-year
+const currMonthIndex = ref(new Date().getMonth()); // current-month-index
+
+const currMonthAndYear = computed(() => {
+	return `${
+		currLanguage.value === 'ru'
+			? MONTHSRU[currMonthIndex.value]
+			: MONTHSEN[currMonthIndex.value]
+	} ${currYear.value}`;
+});
+
+console.log('currMonthAndYear', currMonthAndYear.value);
 </script>
 
 <template>
-	<p>Calendar</p>
+	<span>{{ currMonthAndYear }}</span>
 </template>
